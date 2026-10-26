@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="50%" stop-color="#913fe2"/>
+      <stop offset="100%" stop-color="#6b21a8"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="16" y="16" width="480" height="480" rx="96" fill="none" stroke="url(#glow)" stroke-width="8"/>
+  <!-- Manga book pages / bookmark -->
+  <g transform="translate(106, 106) scale(0.585)">
+    <!-- Book shape -->
+    <path d="M70 120 C140 90, 230 110, 256 140 C282 110, 372 90, 442 120 L442 410 C372 380, 282 400, 256 430 C230 400, 140 380, 70 410 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path d="M256 140 L256 430" stroke="#7e22ce" stroke-width="12" stroke-linecap="round"/>
+    <!-- Page lines left -->
+    <line x1="120" y1="190" x2="220" y2="175" stroke="#913fe2" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+    <line x1="120" y1="240" x2="220" y2="225" stroke="#913fe2" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+    <line x1="120" y1="290" x2="200" y2="275" stroke="#913fe2" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+    <!-- Checkmark on right page -->
+    <path d="M295 240 L340 285 L415 190" fill="none" stroke="#913fe2" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Bookmark ribbon -->
+    <path d="M236 60 L276 60 L276 170 L256 150 L236 170 Z" fill="#fbbf24"/>
+  </g>
+</svg>

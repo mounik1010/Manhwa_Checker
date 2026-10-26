@@ -1,0 +1,9 @@
+name = "manhwa-checker-proxy"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+# Optional: Set to your GitHub Pages origin to restrict CORS
+# e.g., ALLOWED_ORIGIN = "https://yourusername.github.io"
+# Default is "*" to allow development and deployment anywhere
+ALLOWED_ORIGIN = "*"

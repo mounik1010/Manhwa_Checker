@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Manhwa Checker</title>
+  
+  <!-- PWA & Mobile Optimization -->
+  <meta name="description" content="Personal Asura Scans manhwa reading tracker with instant readable chapter check">
+  <meta name="theme-color" content="#913FE2">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Manhwa Checker">
+  
+  <!-- Relative paths for GitHub Pages project sites -->
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header: App Name, Theme Toggle, Settings -->
+    <header class="app-header">
+      <div class="brand-wrapper">
+        <img src="./icons/icon.svg" alt="Manhwa Checker Logo" class="app-logo">
+        <h1 class="app-title">Manhwa Checker</h1>
+      </div>
+      <div class="header-actions">
+        <button id="themeToggleBtn" class="icon-btn" aria-label="Toggle theme" title="Toggle theme">
+          <!-- Sun / Moon / System SVG icons -->
+          <svg id="themeIconSun" class="theme-icon" style="display:none;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg id="themeIconMoon" class="theme-icon" style="display:none;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+          <svg id="themeIconSystem" class="theme-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </button>
+        <button id="settingsBtn" class="icon-btn" aria-label="Settings" title="Settings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Big Check Button -->
+    <section class="check-section">
+      <button id="checkBtn" class="btn-check" aria-label="Check for new chapters">
+        <svg class="check-icon" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span class="check-spinner" aria-hidden="true"></span>
+        <span id="checkBtnText">Check for Updates</span>
+      </button>
+      <div id="checkStatusMsg" class="check-status-msg" aria-live="polite"></div>
+    </section>
+
+    <!-- Available to Read Section -->
+    <section id="availableSection" class="available-section">
+      <div id="availableHeader" class="available-header is-open" role="button" aria-expanded="true" tabindex="0">
+        <div class="available-title-row">
+          <h2 class="section-title">Available to Read</h2>
+          <span id="availableBadge" class="badge-count badge-zero" aria-live="polite">0 new</span>
+        </div>
+        <div class="available-header-actions">
+          <button id="openAllBtn" class="btn-open-all" style="display:none;" aria-label="Open all next chapters in tabs">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            Open all
+          </button>
+          <svg class="chevron-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+      <div id="availableBody" class="available-body is-open">
+        <!-- Rendered dynamically -->
+        <div id="availableCardsContainer" class="titles-list"></div>
+        <div id="availableEmptyState" class="empty-state">
+          <div>Nothing new to read right now.</div>
+          <div class="empty-state-hint">Press "Check for Updates" to scan Asura Scans.</div>
+        </div>
+        <!-- Unverified note if any title failed -->
+        <div id="unverifiedBox" class="unverified-box" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- My List Section -->
+    <section class="my-list-section">
+      <div class="list-header-row">
+        <h2 class="section-title">My Tracked Titles</h2>
+        <span id="titlesCountBadge" class="list-count-badge">0 titles</span>
+      </div>
+
+      <!-- Add Title Form -->
+      <form id="addTitleForm" class="add-form" autocomplete="off">
+        <div class="input-group">
+          <label for="titleNameInput" class="input-label">Title Name</label>
+          <input id="titleNameInput" class="text-input" type="text" placeholder="e.g. Return of the Mount Hua Sect" required>
+        </div>
+        <div class="input-group input-group-sm">
+          <label for="titleChapterInput" class="input-label">Chapter</label>
+          <input id="titleChapterInput" class="text-input" type="number" min="0" value="0" required>
+        </div>
+        <button type="submit" class="btn-add" aria-label="Add title to list">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+          </svg>
+          Add
+        </button>
+      </form>
+
+      <!-- Tracked Titles Rows -->
+      <div id="titlesListContainer" class="titles-list" role="list">
+        <!-- Rows rendered dynamically -->
+      </div>
+
+      <!-- Backup / Restore Actions -->
+      <div class="list-footer-actions">
+        <div class="backup-actions">
+          <button id="exportBtn" class="btn-secondary" title="Export titles as JSON">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Export JSON
+          </button>
+          <button id="importBtn" class="btn-secondary" title="Import titles from JSON">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            Import JSON
+          </button>
+          <input type="file" id="importFileInput" class="file-input-hidden" accept=".json,application/json">
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Undo Toast / Snackbar -->
+  <div id="undoToast" class="toast-container" role="status" aria-live="polite">
+    <span id="toastMessage" class="toast-text"></span>
+    <button id="toastUndoBtn" class="toast-undo-btn">Undo</button>
+    <button id="toastCloseBtn" class="toast-close-btn" aria-label="Dismiss toast">✕</button>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="settingsModalTitle" class="modal-title">Settings</h3>
+        <button id="closeSettingsModal" class="icon-btn" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label for="workerUrlInput" class="input-label">Cloudflare Worker Proxy URL</label>
+          <input id="workerUrlInput" class="text-input" type="url" placeholder="https://manhwa-proxy.yourname.workers.dev">
+          <div class="empty-state-hint">Required for bypassing CORS when checking Asura Scans.</div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Theme Mode</label>
+          <div class="theme-selector">
+            <div class="theme-option" data-theme-val="system">System</div>
+            <div class="theme-option" data-theme-val="dark">Dark</div>
+            <div class="theme-option" data-theme-val="light">Light</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="saveSettingsBtn" class="btn-primary">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Title Modal -->
+  <div id="editTitleModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="editModalTitle" class="modal-title">Edit Title Name</h3>
+        <button id="closeEditModal" class="icon-btn" aria-label="Close edit modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label for="editTitleNameInput" class="input-label">Name</label>
+          <input id="editTitleNameInput" class="text-input" type="text" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelEditBtn" class="btn-secondary">Cancel</button>
+        <button id="saveEditBtn" class="btn-primary">Save Name</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div id="deleteConfirmModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="deleteModalTitle" class="modal-title">Confirm Delete</h3>
+        <button id="closeDeleteModal" class="icon-btn" aria-label="Close delete modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="deleteConfirmText">Are you sure you want to remove this title from your list?</p>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelDeleteBtn" class="btn-secondary">Cancel</button>
+        <button id="confirmDeleteBtn" class="btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import Conflict / Choice Modal -->
+  <div id="importChoiceModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="importModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="importModalTitle" class="modal-title">Import Titles</h3>
+        <button id="closeImportModal" class="icon-btn" aria-label="Close import modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="importSummaryText">Found titles to import. How would you like to apply them?</p>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelImportBtn" class="btn-secondary">Cancel</button>
+        <button id="importMergeBtn" class="btn-primary">Merge</button>
+        <button id="importReplaceBtn" class="btn-danger">Replace All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service Worker Registration & App Entry Point -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
